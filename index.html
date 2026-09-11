@@ -1,0 +1,173 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Histórias</title>
+<style>
+*{box-sizing:border-box}html,body{margin:0;background:#141414;color:#fff;font-family:Arial,Helvetica,sans-serif}
+body{min-height:100vh}button{font:inherit}
+.nav{height:68px;padding:0 4%;display:flex;align-items:center;gap:30px;position:fixed;top:0;left:0;right:0;z-index:20;background:linear-gradient(#050505,rgba(5,5,5,.72),transparent)}
+.logo{font-size:24px;font-weight:900;color:#e50914;letter-spacing:-1px}.navlinks{display:flex;gap:22px;color:#ddd;font-size:14px}.navlinks span{cursor:pointer}.navlinks span:first-child{color:#fff;font-weight:bold}
+.actions{margin-left:auto;display:flex;gap:10px;align-items:center}.icon{background:transparent;border:0;color:white;cursor:pointer;font-size:20px}.add{background:#e50914;border:0;color:white;padding:9px 15px;border-radius:4px;font-weight:bold;cursor:pointer}
+.hero{height:500px;padding:150px 6% 60px;display:flex;align-items:center;background:linear-gradient(90deg,#111 0%,rgba(17,17,17,.9) 30%,rgba(17,17,17,.15) 75%),linear-gradient(0deg,#141414 0%,transparent 28%),radial-gradient(circle at 70% 40%,#4b2730,#181818 50%,#111);position:relative}
+.heroContent{max-width:540px}.eyebrow{font-size:13px;text-transform:uppercase;letter-spacing:2px;color:#ddd}.hero h2{font-size:46px;margin:10px 0}.hero p{color:#ddd;line-height:1.5;font-size:16px}.heroBtns{display:flex;gap:10px;margin-top:22px}.play{border:0;border-radius:4px;padding:12px 22px;font-weight:bold;cursor:pointer}.more{background:#555;color:white}
+.content{padding:0 4% 55px;margin-top:-10px;position:relative}.section{margin:28px 0}.section h2{font-size:20px;margin:0 0 13px}.row{display:flex;gap:9px;overflow-x:auto;padding:4px 2px 14px;scrollbar-width:none}.row::-webkit-scrollbar{display:none}
+.card{flex:0 0 190px;height:275px;border-radius:5px;overflow:hidden;position:relative;background:#252525;cursor:pointer;transition:.25s;box-shadow:0 2px 8px #0008}.card:hover{transform:scale(1.08);z-index:4}.poster{height:100%;display:flex;align-items:center;justify-content:center;text-align:center;padding:18px;font-size:24px;font-weight:800;background:linear-gradient(145deg,#3a3a3a,#111)}.cardInfo{position:absolute;left:0;right:0;bottom:0;padding:28px 12px 11px;background:linear-gradient(transparent,#000);opacity:0;transition:.2s}.card:hover .cardInfo{opacity:1}.cardTitle{font-weight:bold;font-size:15px}.cardMeta{font-size:11px;color:#ccc;margin-top:4px}
+.empty{padding:55px;text-align:center;color:#999;background:#1c1c1c;border-radius:5px}.hidden{display:none}
+.panel{max-width:850px;margin:95px auto 40px;background:#1c1c1c;padding:28px;border-radius:6px}.panel h2{margin-top:0}input,textarea{width:100%;background:#292929;border:1px solid #444;color:white;border-radius:4px;padding:12px;margin:7px 0 17px;outline:none}textarea{min-height:190px;line-height:1.5}.btn{background:#e50914;color:white;border:0;padding:11px 17px;border-radius:4px;font-weight:bold;cursor:pointer}.secondary{background:#444}.topback{position:fixed;top:85px;left:4%;z-index:10;background:#333;color:white;border:0;padding:9px 13px;border-radius:4px;cursor:pointer}
+.storyHero{min-height:400px;padding:130px 6% 55px;background:linear-gradient(90deg,#141414 5%,rgba(20,20,20,.8) 45%,transparent),radial-gradient(circle at 80% 40%,#3b2025,#151515 55%)}.storyHero h2{font-size:42px;margin:8px 0}.storyHero p{max-width:600px;color:#ccc;line-height:1.55}.chapter{background:#202020;padding:16px 18px;border-radius:4px;margin:8px 0;cursor:pointer;display:flex;justify-content:space-between;align-items:center}.chapter:hover{background:#2a2a2a}.chapter small{color:#999}
+.notice{background:#262626;padding:10px;border-radius:4px;color:#aaa;font-size:13px;margin-bottom:18px}
+.reader{white-space:pre-wrap;line-height:1.8;font-size:18px;color:#eee}.readerTitle{font-size:30px;margin-bottom:25px}
+@media(max-width:700px){.navlinks{display:none}.hero{height:470px}.hero h2{font-size:34px}.card{flex-basis:150px;height:220px}.panel{margin:90px 4% 30px}.storyHero h2{font-size:34px}}
+</style>
+</head>
+<body>
+<nav class="nav">
+  <div class="logo">HISTÓRIAS</div>
+  <div class="navlinks"><span onclick="home()">Início</span><span onclick="home()">Histórias</span><span onclick="showCreate()">Minha lista</span></div>
+  <div class="actions"><button class="icon">⌕</button><button class="add" onclick="showCreate()">+ Nova</button></div>
+</nav>
+
+<main>
+<section id="home">
+  <div class="hero">
+    <div class="heroContent">
+      <div class="eyebrow">Seu catálogo de histórias</div>
+      <h2 id="heroTitle">Comece sua próxima história</h2>
+      <p id="heroDesc">Crie histórias, organize capítulos e continue escrevendo de onde parou.</p>
+      <div class="heroBtns"><button class="play" onclick="showCreate()">▶ Criar história</button><button class="play more" onclick="document.getElementById('catalog').scrollIntoView({behavior:'smooth'})">ⓘ Ver catálogo</button></div>
+    </div>
+  </div>
+  <div class="content" id="catalog"></div>
+</section>
+
+<section id="storyPage" class="hidden"></section>
+<section id="createPage" class="hidden">
+ <div class="panel"><h2 id="storyFormHeading">Adicionar história</h2>
+ <label>Título</label><input id="newTitle" placeholder="Ex.: As Crônicas de...">
+ <label>Descrição</label><textarea id="newDesc" placeholder="Escreva uma breve sinopse"></textarea>
+ <label>Capa</label><input id="newCover" placeholder="Texto que aparecerá na capa">
+ <label>Imagem da capa (opcional)</label><input id="newImage" type="file" accept="image/*">
+ <div id="imagePreview" style="display:none;margin:4px 0 17px"><img id="previewImg" style="width:190px;height:275px;object-fit:cover;border-radius:5px"></div>
+ <div style="display:flex;gap:10px"><button class="btn" id="storySaveBtn" onclick="currentEditingStoryId?saveEditedStory():createStory()">Adicionar</button><button class="btn secondary" onclick="home()">Cancelar</button></div></div>
+</section>
+<section id="chapterPage" class="hidden">
+ <button class="topback" onclick="openStory(currentStoryId)">← Voltar</button>
+ <div class="panel"><h2 id="chapterHeading">Novo capítulo</h2>
+ <div class="notice">Seu capítulo é salvo no navegador e continua disponível depois que você fechar e reabrir a página.</div>
+ <label>Título do capítulo</label><input id="chapterTitle" placeholder="Capítulo 1 — ...">
+ <label>Texto</label><textarea id="chapterText" placeholder="Comece a escrever..."></textarea>
+ <div style="display:flex;gap:10px"><button class="btn" onclick="saveChapter()">Salvar capítulo</button><button class="btn secondary" onclick="openStory(currentStoryId)">Cancelar</button></div></div>
+</section>
+<section id="readerPage" class="hidden">
+ <button class="topback" onclick="openStory(currentStoryId)">← Voltar</button>
+ <div class="panel"><div id="reader"></div></div>
+</section>
+</main>
+
+<script>
+const KEY="meu_catalogo_historias_v3";
+let data=null;
+try{data=JSON.parse(localStorage.getItem(KEY)||"null")}catch(e){}
+if(!data)try{data=JSON.parse(localStorage.getItem("meu_catalogo_historias_v2")||"null")}catch(e){}
+if(!data)try{data=JSON.parse(localStorage.getItem("meu_catalogo_historias_v1")||"null")}catch(e){}
+data=data&&Array.isArray(data.stories)?data:{stories:[]};
+let currentStoryId=null,currentChapterId=null,currentEditingStoryId=null;
+const $=id=>document.getElementById(id);
+
+function uid(){return window.crypto&&typeof crypto.randomUUID==="function"?crypto.randomUUID():"id-"+Date.now()+"-"+Math.random().toString(36).slice(2)}
+function persist(){try{localStorage.setItem(KEY,JSON.stringify(data));return true}catch(e){alert("Não foi possível salvar. O armazenamento do navegador pode estar cheio.");return false}}
+function compressImage(file){return new Promise((resolve,reject)=>{
+ if(!file)return resolve("");
+ const r=new FileReader();
+ r.onerror=()=>reject(new Error("Falha ao ler a imagem."));
+ r.onload=()=>{
+  const img=new Image();
+  img.onerror=()=>reject(new Error("Imagem inválida."));
+  img.onload=()=>{
+   const max=1000,sc=Math.min(1,max/Math.max(img.width,img.height)),c=document.createElement("canvas");
+   c.width=Math.max(1,Math.round(img.width*sc));c.height=Math.max(1,Math.round(img.height*sc));
+   c.getContext("2d").drawImage(img,0,0,c.width,c.height);
+   resolve(c.toDataURL("image/jpeg",.78));
+  };
+  img.src=r.result;
+ };
+ r.readAsDataURL(file);
+})}
+function hideAll(){["home","storyPage","createPage","chapterPage","readerPage"].forEach(x=>$(x).classList.add("hidden"))}
+function home(){hideAll();$("home").classList.remove("hidden");renderHome();window.scrollTo(0,0)}
+function renderHome(){
+ const c=$("catalog");c.innerHTML="";
+ if(!data.stories.length){c.innerHTML='<div class="empty">Seu catálogo ainda está vazio.<br><br><button class="btn" onclick="showCreate()">+ Criar primeira história</button></div>';return}
+ const sections={recentes:data.stories.slice().reverse(),todas:data.stories};
+ const labels=[["recentes","Continuar escrevendo"],["todas","Todas as histórias"]];
+ labels.forEach(([key,label])=>{
+  const arr=sections[key];if(!arr.length)return;
+  const sec=document.createElement("div");sec.className="section";sec.innerHTML=`<h2>${label}</h2><div class="row"></div>`;
+  const row=sec.querySelector(".row");
+  arr.forEach(s=>{
+   const card=document.createElement("div");card.className="card";
+   card.innerHTML=`<div class="poster">${s.image?`<img src="${s.image}" alt="" style="width:100%;height:100%;object-fit:cover">`:escapeHtml(s.cover||s.title)}</div><div class="cardInfo"><div class="cardTitle">${escapeHtml(s.title)}</div><div class="cardMeta">${s.chapters.length} capítulo(s)</div></div>`;
+   card.onclick=()=>openStory(s.id);row.appendChild(card)
+  });c.appendChild(sec)
+ })
+}
+function showCreate(){
+ currentEditingStoryId=null;hideAll();$("createPage").classList.remove("hidden");
+ $("storyFormHeading")?.textContent; if($("storyFormHeading"))$("storyFormHeading").textContent="Adicionar história";
+ if($("storySaveBtn"))$("storySaveBtn").textContent="Adicionar";
+ $("newTitle").value="";$("newDesc").value="";$("newCover").value="";
+ if($("newImage"))$("newImage").value="";
+ if($("imagePreview"))$("imagePreview").style.display="none";
+ window.scrollTo(0,0)
+}
+if($("newImage"))$("newImage").addEventListener("change",()=>{
+ const f=$("newImage").files[0];if(!f)return;
+ const r=new FileReader();r.onload=()=>{$("previewImg").src=r.result;$("imagePreview").style.display="block"};r.readAsDataURL(f)
+});
+async function createStory(){
+ const title=$("newTitle").value.trim();if(!title){alert("Digite um título.");return}
+ let image="";try{image=await compressImage($("newImage")?.files[0])}catch(e){alert("Não foi possível processar a imagem.");return}
+ const s={id:uid(),title,desc:$("newDesc").value.trim(),cover:$("newCover").value.trim(),image,chapters:[]};
+ data.stories.push(s);if(persist())openStory(s.id)
+}
+function editStory(id){
+ const s=data.stories.find(x=>x.id===id);if(!s)return;
+ currentEditingStoryId=id;hideAll();$("createPage").classList.remove("hidden");
+ if($("storyFormHeading"))$("storyFormHeading").textContent="Editar história";
+ if($("storySaveBtn"))$("storySaveBtn").textContent="Salvar alterações";
+ $("newTitle").value=s.title||"";$("newDesc").value=s.desc||"";$("newCover").value=s.cover||"";
+ if($("newImage"))$("newImage").value="";
+ if(s.image&&$("imagePreview")){$("previewImg").src=s.image;$("imagePreview").style.display="block"}else if($("imagePreview"))$("imagePreview").style.display="none";
+ window.scrollTo(0,0)
+}
+async function saveEditedStory(){
+ const s=data.stories.find(x=>x.id===currentEditingStoryId);if(!s)return;
+ const title=$("newTitle").value.trim();if(!title){alert("Digite um título.");return}
+ s.title=title;s.desc=$("newDesc").value.trim();s.cover=$("newCover").value.trim();
+ if($("newImage")?.files[0])try{s.image=await compressImage($("newImage").files[0])}catch(e){alert("Não foi possível processar a imagem.");return}
+ if(persist())openStory(s.id)
+}
+function deleteStory(id){
+ const s=data.stories.find(x=>x.id===id);if(!s)return;
+ if(!confirm(`Excluir a história "${s.title}"? Esta ação também excluirá todos os capítulos dela.`))return;
+ data.stories=data.stories.filter(x=>x.id!==id);if(persist())home()
+}
+function getStory(){return data.stories.find(s=>s.id===currentStoryId)}
+function openStory(id){
+ currentStoryId=id;hideAll();$("storyPage").classList.remove("hidden");window.scrollTo(0,0);const s=getStory();
+ $("storyPage").innerHTML=`<div class="storyHero" ${s.image?`style="background-image:linear-gradient(90deg,#141414 5%,rgba(20,20,20,.82) 45%,rgba(20,20,20,.25)),url('${s.image}');background-size:cover;background-position:center"`:""}><div class="eyebrow">HISTÓRIA</div><h2>${escapeHtml(s.title)}</h2><p>${escapeHtml(s.desc||"Sem descrição.")}</p><div style="display:flex;gap:10px;flex-wrap:wrap"><button class="btn" onclick="newChapter()">+ Adicionar capítulo</button><button class="btn secondary" onclick="editStory('${s.id}')">✎ Editar história</button><button class="btn secondary" onclick="deleteStory('${s.id}')">🗑 Excluir história</button></div></div><div class="content"><div class="section"><h2>Capítulos</h2><div id="chapters"></div></div></div>`;
+  const box=$("chapters");if(!s.chapters.length)box.innerHTML='<div class="empty">Nenhum capítulo ainda.</div>';
+ s.chapters.forEach((c,i)=>{const el=document.createElement("div");el.className="chapter";el.innerHTML=`<span><strong>${i+1}. ${escapeHtml(c.title)}</strong><small>${c.text.length} caracteres</small></span><span>›</span>`;el.onclick=()=>openReader(c.id);box.appendChild(el)})
+}
+function newChapter(){currentChapterId=null;hideAll();$("chapterPage").classList.remove("hidden");$("chapterHeading").textContent="Novo capítulo";$("chapterTitle").value="";$("chapterText").value=""}
+function editChapter(id){const s=getStory(),c=s.chapters.find(x=>x.id===id);currentChapterId=id;hideAll();$("chapterPage").classList.remove("hidden");$("chapterHeading").textContent="Editar capítulo";$("chapterTitle").value=c.title;$("chapterText").value=c.text}
+function saveChapter(){const title=$("chapterTitle").value.trim();if(!title){alert("Digite o título do capítulo.");return}const s=getStory(),text=$("chapterText").value;
+ if(currentChapterId){const c=s.chapters.find(x=>x.id===currentChapterId);c.title=title;c.text=text}else{s.chapters.push({id:uid(),title,text})}if(persist())openStory(s.id)}
+function openReader(id){const s=getStory(),c=s.chapters.find(x=>x.id===id);hideAll();$("readerPage").classList.remove("hidden");$("reader").innerHTML=`<div class="readerTitle">${escapeHtml(c.title)}</div><div class="reader">${escapeHtml(c.text)}</div><br><button class="btn secondary" onclick="editChapter('${c.id}')">✎ Editar capítulo</button>`}
+function escapeHtml(v){return String(v).replace(/[&<>"']/g,m=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#039;"}[m]))}
+home();
+</script>
+</body>
+</html>
