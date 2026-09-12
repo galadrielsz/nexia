@@ -180,7 +180,20 @@ function newChapter(){currentChapterId=null;hideAll();$("chapterPage").classList
 function editChapter(id){const s=getStory(),c=s.chapters.find(x=>x.id===id);currentChapterId=id;hideAll();$("chapterPage").classList.remove("hidden");$("chapterHeading").textContent="Editar capítulo";$("chapterTitle").value=c.title;$("chapterText").value=c.text}
 function saveChapter(){const title=$("chapterTitle").value.trim();if(!title){alert("Digite o título do capítulo.");return}const s=getStory(),text=$("chapterText").value;
  if(currentChapterId){const c=s.chapters.find(x=>x.id===currentChapterId);c.title=title;c.text=text}else{s.chapters.push({id:uid(),title,text})}if(persist())openStory(s.id)}
-function openReader(id){const s=getStory(),c=s.chapters.find(x=>x.id===id);hideAll();$("readerPage").classList.remove("hidden");$("reader").innerHTML=`<div class="readerTitle">${escapeHtml(c.title)}</div><div class="reader">${escapeHtml(c.text)}</div><br><button class="btn secondary" onclick="editChapter('${c.id}')">✎ Editar capítulo</button>`}
+function deleteChapter(id){
+ const s=getStory();
+ const c=s.chapters.find(x=>x.id===id);
+ if(!c)return;
+ if(!confirm(`Excluir o capítulo "${c.title}"?`))return;
+ s.chapters=s.chapters.filter(x=>x.id!==id);
+ if(persist())openStory(s.id);
+}
+function openReader(id){
+ const s=getStory(),c=s.chapters.find(x=>x.id===id);
+ hideAll();
+ $("readerPage").classList.remove("hidden");
+ $("reader").innerHTML=`<div class="readerTitle">${escapeHtml(c.title)}</div><div class="reader">${escapeHtml(c.text)}</div><br><div style="display:flex;gap:10px;flex-wrap:wrap"><button class="btn secondary" onclick="editChapter('${c.id}')">✎ Editar capítulo</button><button class="btn secondary" onclick="deleteChapter('${c.id}')">🗑 Excluir capítulo</button></div>`
+}
 function escapeHtml(v){return String(v).replace(/[&<>"']/g,m=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#039;"}[m]))}
 home();
 </script>
